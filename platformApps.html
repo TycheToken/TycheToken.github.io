@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tyche Platform</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css">
+</head>
+
+<style>
+.top_banner {
+    display:table;
+    color: white;
+    text-align: left;
+    background-color: rgba(0, 0, 0, 0.918);
+    height: 10%;
+    vertical-align: middle;
+    font-size: 200%;
+    width:100%;
+    }
+.header_text{
+    display:table-cell;
+    vertical-align:center;
+    font-size: 200%;
+    padding: 3%;
+  }
+</style>
+
+
+
+<body>
+
+
+
+<div class="top_banner"><h1 class="header_text">Tyche Token</h1></div>
+<div style="height:20%"></div>
+
+
+    
+
+
+    <div class="ui stackable three column grid">
+        <div class="ui three wide column"></div>
+        <div class="ui ten wide column">
+            <div class="ui top attached tabular menu">
+                    <a id="tab-buyTokens" class="item active" data-tab="buy-sell-Tokens" onclick="changeTab('buyTokens')">Buy Tokens</a>
+                    <a id="tab-playLotto" class="item" data-tab="playLotto" onclick="changeTab('playLotto')">Tyche lotto</a>
+                    <a id="tab-playReward" class="item" data-tab="playReward" onclick="changeTab('playReward')">Tyche Reward</a>
+            </div>
+                
+            
+            <!-- **********************tokens tab********************************************************** -->
+            <div id="main-buyTokens" class="ui column bottom attached tab segment active" data-tab="buy-sell-Tokens">
+            <div class="container" style="padding:5%">
+                <form class="ui form">
+                    <br><br>
+                    <h3 class="ui horizontal divider header">
+                        <i class="tag icon"></i>
+                        Token Information.
+                    </h3>
+                    <br><br>
+
+                    <div class="two fields">            
+                        <div class="field">
+                            <div class="ui blue fluid huge pointing below label">Tyche Price</div>
+                            <div class="ui labeled input">
+                                <label for="tyche_price" class="ui label">ETH</label>
+                                <input id="tyche_price" type="text" name="price" placeholder="NA" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="field">
+                            <div class="ui blue fluid huge pointing below label">Your Balance</div>
+                            <div class="ui labeled input">
+                                <label for="tyche_balance" class="ui label">TYC</label>
+                                <input id="tyche_balance" type="text" name="balance" placeholder=0 readonly>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    
+                    
+                    
+                    <!-- BUY ***********************************************************************************-->
+                    <br><br><br><br><br><br>
+                    <h3 class="ui horizontal divider header">
+                        <i class="tag icon"></i>
+                        Buy Tokens.
+                    </h3>
+                    <br><br>
+                    <div class="two fields">                                
+                        <div class="field">
+                            <div class="ui blue fluid huge pointing below label">You Will Pay:</div>
+                            <div class="ui labeled input">
+                                <label for="buy_eth_amount" class="ui label">ETH</label>
+                                <input id="buy_eth_amount" type="number" name="buyethamount" placeholder=0 onkeyup="getTokenAmount('#buy_eth_amount','#buy_tyche_amount')" min="0" step="0.0001">
+                            </div>
+                        </div>
+                        
+                        <div class="field">
+                            <div class="ui blue fluid huge pointing below label">You Will Buy:</div>
+                            <div class="ui labeled input">
+                                <label for="buy_tyche_amount" class="ui label">TYC</label>
+                                <input id="buy_tyche_amount" type="number" name="buytycheamount" placeholder=0 onkeyup="getEtherAmount('#buy_tyche_amount','#buy_eth_amount')" min=0 step="0.1">
+                            </div>
+                        </div>
+
+                    </div>
+                    <button class="ui big green fluid button" id="setvalues" type="button" onclick="buyToken()">Buy Tyche</button>
+
+                
+                    
+                    <!-- SELL ***********************************************************************************-->
+                    <br><br><br><br><br><br>
+                    <h3 class="ui horizontal divider header">
+                        <i class="tag icon"></i>
+                        Sell Tokens.
+                    </h3>
+                    <br><br>
+
+
+                    <div class="two fields">                                
+                        <div class="field">
+                            <div class="ui blue fluid huge pointing below label">You will Receive:</div>
+                            <div class="ui labeled input">
+                                <label for="sell_eth_amount" class="ui label">ETH</label>
+                                <input id="sell_eth_amount" type="number" name="sell_ethamount" placeholder=0 readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="field">
+                            <div class="ui blue fluid huge pointing below label">You Will Sell:</div>
+                            <div class="ui labeled input">
+                                <label for="sell_tyche_amount" class="ui label">TYC</label>
+                                <input id="sell_tyche_amount" type="number" name="selltycheamount" placeholder=0 onkeyup="getEtherAmount('#sell_tyche_amount','#sell_eth_amount')" min=0 step="0.1">
+                            </div>
+                        </div>
+
+                    </div>
+                    <button class="ui big red fluid button" id="setvalues" type="button" onclick="sellToken()">Sell Tyche</button>
+
+                </form>
+            </div>
+            </div>
+
+            
+            
+            
+            
+            <!-- ************************************************************************************************************************************ -->            
+            <!-- ************************************************************************************************************************************ -->
+            <!-- *******************   Lotto ***********************************************************************-->
+            <div id="main-playLotto" class="ui bottom attached tab segment" data-tab="playLotto" style="text-align:center">
+                    <div class="container" style="padding:5%">
+                        
+                        <!-- <h4 class="ui horizontal divider header">
+                            <i class="tag icon"></i>
+                            How Tyche Lotto Works.
+                        </h4>
+                        <br>
+                        <p align="justify">Tyche lotto is a probably fair lottery game on the Ethereum network, that makes use of smart contracts to provide transparency.
+                                Winner selection is equivalent to a random draw from an urn that contains the addresses of all participants. In this way, as the drawn always return an address, the lottery is warrantied to have a winner every time that it runs. There is always a winner in every run of the Tyche Lotto app, and there is only one winner per run... well, not really. Let me explain you:
+                                The total amount obtained from tickets sold is divided as follows: The winner takes 90% of the total amount, 8% of the total is sent to a reward pot,  and the remaining 2% goes to the creator of the app. 
+                                The reward pot is used to run a second lottery "Tyche Reward" for which there are no tickets for sale. The participants of this lottery are all the previous players of the Tyche loto. If no one wins the Tyche Reward in particular run, it will run again the next time that Tyche lotto runs, and the reward price will be composed of the previous reward amount plus the 8% of the current run of Tyche Lotto.                                 
+                                Every time that you play Tyche Lotto you get a ticket for Tyche rewards until you or someone else win the Tyche Reward lottery and the whole process starts again.                                
+                                The winner of the Tyche Rewards takes 98% of the total reward, and the remaining  2% is paid to the app creator.         
+                        </p>
+                        <br><br><br><br><br> -->
+
+
+                        <h4 class="ui horizontal divider header">
+                            <i class="cart arrow down icon"></i>
+                            Purchase Tickets.
+                        </h4>
+                        <br>
+                        <form class="ui form">
+                            <div class="three fields"> 
+                                <div class="field">
+                                    <div class="ui blue huge pointing below label">Ticket Price</div>
+                                    <div class="ui labeled input">
+                                        <label for="lotto_ticketPrice" class="ui label">TYC</label>
+                                        <input id="lotto_ticketPrice" type="text" name="lotto_ticketPrice" placeholder="NA" readonly>
+                                    </div>
+                                </div>           
+                                
+                                <div class="field">
+                                    <div class="ui basic blue huge pointing below label">Your Tickets</div>
+                                    <div class="ui labeled input">
+                                        <label for="lotto_AvailableTickets" class="ui label">Quantity</label>
+                                        <input id="lotto_AvailableTickets" type="number" name="lotto_AvailableTickets" placeholder="NA" readonly>
+                                    </div>
+                                </div>
+                                
+                                <div class="field">
+                                    <div class="ui blue huge pointing below label">Numebr of Tickets to Buy</div>
+                                    <div class="ui labeled input">
+                                        <label for="lotto_buyAmount" class="ui label">Quantity</label>
+                                        <input id="lotto_buyAmount" type="number" name="lotto_buyAmount" placeholder="1" min="1" step="1">
+                                    </div>
+                                </div>
+                            </div>    
+    
+                        </form>
+                        <button class="ui gray big fluid circular button" id="lotto_buyTickets" type="button" onclick="lotto_buyTickets()">Buy Tickets</button>
+                        <br><br><br><br>
+
+                        <h4 class="ui horizontal divider header">
+                                <i class="tasks icon"></i>
+                            Game Status.
+                        </h4>
+                        <br>
+                        <div class="ui stackable three column grid">
+                            <div class="six wide column">
+                                <label id="lotto_status01" class="ui huge fluid yellow circular label" >Lottery is Open</label><br><br>
+                                <label id="lotto_status02" class="ui huge fluid yellow circular label" >Lottery will close on Block 0 </label><br><br>
+                                <label id="lotto_status03" class="ui huge fluid yellow circular label" >Lottery will run on Block 0 </label><br><br>
+                                <label id="lotto_status04" class="ui huge fluid yellow circular label" >Current Block is 0</label>
+                            </div>
+
+                            <div class="ten wide column" style="text-align:center; font-size:120%">
+                                <label class="ui huge fluid green circular label" >Current Prize:</label><br><br>
+                                <div id="lotto_status05" style="font-size: 1000%; padding:10%; text-align:center" >10</div>    
+                            </div>
+                        </div>
+                        <br><br><br><br><br>
+
+                        <h4 class="ui horizontal divider header">
+                            <i class="handshake outline icon"></i>
+                            Last Winner!
+                        </h4>
+                        <br>
+                        <label id="lotto_winner_name" class="ui huge basic circular label" >0x00000000000000000000</label>
+                        <label id="lotto_winner_amount" class="ui huge green circular label" >0 TYC</label>
+                        <br><br><br><br><br>
+
+
+                        <h4 class="ui horizontal divider header">
+                            <i class="handshake outline icon"></i>
+                            Recent Winners!
+                        </h4>
+                        <br>
+                        <label id="lotto_winner01_name" class="ui huge basic circular label" >0x00000000000000000000</label>
+                        <label id="lotto_winner01_amount" class="ui huge green circular label" >0 TYC</label>
+                        <br>
+                        <label id="lotto_winner02_name" class="ui huge basic circular label" >0x00000000000000000000</label>
+                        <label id="lotto_winner02_amount" class="ui huge green circular label" >0 TYC</label>
+                        <br>
+                        <label id="lotto_winner03_name" class="ui huge basic circular label" >0x00000000000000000000</label>
+                        <label id="lotto_winner03_amount" class="ui huge green circular label" >0 TYC</label>
+                        <br>
+                        <label id="lotto_winner04_name" class="ui huge basic circular label" >0x00000000000000000000</label>
+                        <label id="lotto_winner04_amount" class="ui huge green circular label" >0 TYC</label>
+                        <br>
+                        <label id="lotto_winner05_name" class="ui huge basic circular label" >0x00000000000000000000</label>
+                        <label id="lotto_winner05_amount" class="ui huge green circular label" >0 TYC</label>
+                        <br><br><br><br><br>
+                        
+                        
+                    </div>
+                </div>
+        
+
+
+
+        <!-- ************************************************************************************************************************************ -->            
+            <!-- ************************************************************************************************************************************ -->
+            <!-- *******************  reward ***********************************************************************-->
+            <div id="main-playReward" class="ui bottom attached tab segment" data-tab="playReward" style="text-align:center">
+                    <div class="container" style="padding:5%">
+                        
+                        <!-- <h4 class="ui horizontal divider header">
+                            <i class="tag icon"></i>
+                            How Tyche Lotto Works.
+                        </h4>
+                        <br>
+                        <p align="justify">Tyche lotto is a probably fair lottery game on the Ethereum network, that makes use of smart contracts to provide transparency.
+                                Winner selection is equivalent to a random draw from an urn that contains the addresses of all participants. In this way, as the drawn always return an address, the lottery is warrantied to have a winner every time that it runs. There is always a winner in every run of the Tyche Lotto app, and there is only one winner per run... well, not really. Let me explain you:
+                                The total amount obtained from tickets sold is divided as follows: The winner takes 90% of the total amount, 8% of the total is sent to a reward pot,  and the remaining 2% goes to the creator of the app. 
+                                The reward pot is used to run a second lottery "Tyche Reward" for which there are no tickets for sale. The participants of this lottery are all the previous players of the Tyche loto. If no one wins the Tyche Reward in particular run, it will run again the next time that Tyche lotto runs, and the reward price will be composed of the previous reward amount plus the 8% of the current run of Tyche Lotto.                                 
+                                Every time that you play Tyche Lotto you get a ticket for Tyche rewards until you or someone else win the Tyche Reward lottery and the whole process starts again.                                
+                                The winner of the Tyche Rewards takes 98% of the total reward, and the remaining  2% is paid to the app creator.         
+                        </p>
+                        <br><br><br><br><br> -->
+
+                        <br>
+                        <h4 class="ui horizontal divider header">
+                                <i class="tasks icon"></i>
+                            Game Status.
+                        </h4>
+                        <br>
+                        <div class="ui stackable three column grid">
+                            <div class="six wide column">
+                                <label id="reward_status01" class="ui huge fluid yellow circular label" >Lottery is Open</label><br><br>
+                                <label id="reward_status02" class="ui huge fluid yellow circular label" >Lottery will close on Block 0 </label><br><br>
+                                <label id="reward_status03" class="ui huge fluid yellow circular label" >Lottery will run on Block 0 </label><br><br>
+                                <label id="reward_status04" class="ui huge fluid yellow circular label" >Current Block is 0</label>
+                            </div>
+
+                            <div class="ten wide column" style="text-align:center; font-size:120%">
+                                <label class="ui huge fluid green circular label" >Current Prize:</label><br><br>
+                                <div id="reward_status05" style="font-size: 1000%; padding:10%; text-align:center" >100000</div>    
+                            </div>
+                        </div>
+                        <br><br><br><br><br>
+
+                        <h4 class="ui horizontal divider header">
+                            <i class="handshake outline icon"></i>
+                            Last Winner!
+                        </h4>
+                        <br>
+                        <label id="reward_winner_name" class="ui huge basic circular label" >0x00000000000000000000</label>
+                        <label id="reward_winner_amount" class="ui huge green circular label" >0 TYC</label>
+                        <br><br><br><br><br>
+
+
+                        <h4 class="ui horizontal divider header">
+                            <i class="handshake outline icon"></i>
+                            Recent Winners!
+                        </h4>
+                        <br>
+                        <label id="reward_winner01_name" class="ui huge basic circular label" >0x00000000000000000000</label>
+                        <label id="reward_winner01_amount" class="ui huge green circular label" >0 TYC</label>
+                        <br>
+                        <label id="reward_winner02_name" class="ui huge basic circular label" >0x00000000000000000000</label>
+                        <label id="reward_winner02_amount" class="ui huge green circular label" >0 TYC</label>
+                        <br>
+                        <label id="reward_winner03_name" class="ui huge basic circular label" >0x00000000000000000000</label>
+                        <label id="reward_winner03_amount" class="ui huge green circular label" >0 TYC</label>
+                        <br>
+                        <label id="reward_winner04_name" class="ui huge basic circular label" >0x00000000000000000000</label>
+                        <label id="reward_winner04_amount" class="ui huge green circular label" >0 TYC</label>
+                        <br>
+                        <label id="reward_winner05_name" class="ui huge basic circular label" >0x00000000000000000000</label>
+                        <label id="reward_winner05_amount" class="ui huge green circular label" >0 TYC</label>
+                        <br><br><br><br><br>
+                        
+                        
+                    </div>
+                </div>
+        </div>
+        <div class="ui three wide column"></div>
+    </div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.js" ></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+
+
+
+
+
+<script>
+        
+        // Check if Web3 has been injected by the browser:
+        if (typeof web3 !== 'undefined') {
+          web3 = new Web3(web3.currentProvider);
+        } else {
+          // set the provider you want from Web3.providers
+          web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+        
+        // get Tyche contract
+        web3.eth.defaultAccount = web3.eth.accounts[0];
+        var ABI = [
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "name",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "string"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": false,
+                    "inputs": [
+                        {
+                            "name": "_from",
+                            "type": "address"
+                        },
+                        {
+                            "name": "_to",
+                            "type": "address"
+                        },
+                        {
+                            "name": "amount",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "transferFrom",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "bool"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [
+                        {
+                            "name": "",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "balances",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "decimals",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "uint8"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": false,
+                    "inputs": [],
+                    "name": "kill",
+                    "outputs": [],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "systemStatus",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "bool"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": false,
+                    "inputs": [
+                        {
+                            "name": "appAddress",
+                            "type": "address"
+                        },
+                        {
+                            "name": "amount",
+                            "type": "uint256"
+                        },
+                        {
+                            "name": "param",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "interfaceWithApp",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "bool"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "constant": false,
+                    "inputs": [
+                        {
+                            "name": "amount",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "burnTokens",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "bool"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [
+                        {
+                            "name": "tokenHolder",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "balanceOf",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": false,
+                    "inputs": [
+                        {
+                            "name": "_spender",
+                            "type": "address"
+                        },
+                        {
+                            "name": "amount",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "approval",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "bool"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "currentSupply",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "tokenPrice",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "symbol",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "string"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": false,
+                    "inputs": [],
+                    "name": "buy",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "bool"
+                        }
+                    ],
+                    "payable": true,
+                    "stateMutability": "payable",
+                    "type": "function"
+                },
+                {
+                    "constant": false,
+                    "inputs": [
+                        {
+                            "name": "_to",
+                            "type": "address"
+                        },
+                        {
+                            "name": "amount",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "transfer",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "bool"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [
+                        {
+                            "name": "",
+                            "type": "address"
+                        },
+                        {
+                            "name": "",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "allowance",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": false,
+                    "inputs": [
+                        {
+                            "name": "amount",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "sell",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "bool"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "admin",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "address"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "constructor"
+                },
+                {
+                    "payable": true,
+                    "stateMutability": "payable",
+                    "type": "fallback"
+                },
+                {
+                    "anonymous": false,
+                    "inputs": [
+                        {
+                            "indexed": true,
+                            "name": "from",
+                            "type": "address"
+                        },
+                        {
+                            "indexed": true,
+                            "name": "to",
+                            "type": "address"
+                        },
+                        {
+                            "indexed": false,
+                            "name": "value",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "Transfer",
+                    "type": "event"
+                },
+                {
+                    "anonymous": false,
+                    "inputs": [
+                        {
+                            "indexed": true,
+                            "name": "from",
+                            "type": "address"
+                        },
+                        {
+                            "indexed": false,
+                            "name": "value",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "Burn",
+                    "type": "event"
+                }
+            ]
+        var contrato = web3.eth.contract(ABI);
+        var tycheContract = contrato.at('0xE7309308DC76394159d1BB02FA2a4799FeD7fb23')
+        displayPrice("#tyche_price")
+        getBalance("#tyche_balance")
+        
+        
+        // get Tyche Lotto contract
+        ABI_Lotto = [
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "name",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "string"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": false,
+                    "inputs": [],
+                    "name": "runReward",
+                    "outputs": [],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "ticketPrice",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "LottoBalance",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [
+                        {
+                            "name": "index",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "getRewardInfo",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "address"
+                        },
+                        {
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": false,
+                    "inputs": [],
+                    "name": "kill",
+                    "outputs": [],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "TycheToken",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "address"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [
+                        {
+                            "name": "index",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "getLottoInfo",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "address"
+                        },
+                        {
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [
+                        {
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "LottoRegist",
+                    "outputs": [
+                        {
+                            "name": "winner",
+                            "type": "address"
+                        },
+                        {
+                            "name": "winnerNumber",
+                            "type": "uint256"
+                        },
+                        {
+                            "name": "prize",
+                            "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "lottoId",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "SetReward",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "bool"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": false,
+                    "inputs": [
+                        {
+                            "name": "nTokens",
+                            "type": "uint8"
+                        }
+                    ],
+                    "name": "setTicketPrice",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "bool"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "RewardId",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [
+                        {
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "RewardRegist",
+                    "outputs": [
+                        {
+                            "name": "winner",
+                            "type": "address"
+                        },
+                        {
+                            "name": "winnerNumber",
+                            "type": "uint256"
+                        },
+                        {
+                            "name": "prize",
+                            "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [
+                        {
+                            "name": "player",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "getTicketsAmount",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "uint256"
+                        },
+                        {
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "mult_dec",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "isSet",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "bool"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": false,
+                    "inputs": [],
+                    "name": "runLotto",
+                    "outputs": [],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "getRandomNumber",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "uint32"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": false,
+                    "inputs": [
+                        {
+                            "name": "from",
+                            "type": "address"
+                        },
+                        {
+                            "name": "value",
+                            "type": "uint256"
+                        },
+                        {
+                            "name": "tokenAddress",
+                            "type": "address"
+                        },
+                        {
+                            "name": "param",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "receiveTransaction",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "bool"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "RewardBalance",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "admin",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "address"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "runOnBlock",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "name": "tokenAddress",
+                            "type": "address"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "constructor"
+                },
+                {
+                    "payable": true,
+                    "stateMutability": "payable",
+                    "type": "fallback"
+                }
+            ]
+        var contrato_lotto = web3.eth.contract(ABI_Lotto);
+        var tycheLottoContract = contrato_lotto.at('0xE61140dDB612202638B14E9Fab9c8fC94fd3e096')
+
+        
+        
+        /* ***************************************************************************/ 
+        /* cange tab on click */
+        function changeTab(tabName){
+            switch(tabName){
+                case "buyTokens":
+                displayPrice("#tyche_price")
+                getBalance("#tyche_balance")
+                $("#tab-playLotto").removeClass('active');
+                $("#tab-playReward").removeClass('active');            
+                $("#tab-buyTokens").addClass('active');
+
+                $("#main-playLotto").removeClass('active');
+                $("#main-playReward").removeClass('active');;
+                $("#main-buyTokens").addClass('active');;
+                break;
+
+
+                case "playLotto":
+                tycheLotto_ticketPrice()
+                getTycheLottoWinners()
+                getPlayerTicketsAmount(0)
+                updateLottoStatus()
+                $("#tab-buyTokens").removeClass('active');
+                $("#tab-playReward").removeClass('active');
+                $("#tab-playLotto").addClass('active');
+               
+
+
+                $("#main-buyTokens").removeClass('active');
+                $("#main-playReward").removeClass('active');
+                $("#main-playLotto").addClass('active');
+                break;
+
+                
+                case "playReward":
+                getTycheRewardWinners("reward_")
+                getPlayerTicketsAmount(1)
+                updateRewardStatus()
+                $("#tab-buyTokens").removeClass('active');
+                $("#tab-playLotto").removeClass('active');
+                $("#tab-playReward").addClass('active');
+               
+
+                $("#main-buyTokens").removeClass('active');
+                $("#main-playLotto").removeClass('active');
+                $("#main-playReward").addClass('active');
+
+
+            }
+            
+        }
+
+
+        /* ***************************************************************************/ 
+        /* transform wei to ether */
+        function weiToEther(value){
+            return value.div(Math.pow(10,18));
+        }  
+
+
+
+
+        // Buy Tokens function
+        function buyToken(){
+            var etherAmount = web3.toBigNumber($("#buy_eth_amount").val());
+            var weiValue = web3.toWei(etherAmount,'ether');
+            tycheContract.buy({from: web3.eth.accounts[0], gas: 3000000, value: weiValue}, function(err, res){})
+            $("#buy_eth_amount").val(0)
+            $("#buy_tyche_amount").val(0)
+        }    
+        
+        //Sell Tokens
+        function sellToken(){
+            var tycheAmount = web3.toBigNumber($("#sell_tyche_amount").val());
+            var balance = web3.toBigNumber($("#tyche_balance").val());
+            if(tycheAmount.lte(balance)){
+                var dec_mult = web3.toBigNumber(Math.pow(10,18)); 
+                tycheAmount = tycheAmount.times(dec_mult);
+                tycheContract.sell(tycheAmount,function(err, res){});
+            }else{
+                window.alert("Balance insuficient or requested value equal to zero.")
+            }
+        }
+
+        // Get the price of the token
+        function displayPrice(fieldreq){
+        tycheContract.tokenPrice(function(error, result){
+          if (!error){
+              console.log(result)
+            var tokenPrice = weiToEther(result);
+            $(fieldreq).val(tokenPrice.round(8).toString(10));
+            }else{
+              window.alarm('Error')
+            }
+          })
+        }
+       
+        // calculate the token amount equivalent when buying using ether
+        function getTokenAmount(reqfield_1,reqfield_2) {
+            var priceValue = web3.toBigNumber($("#tyche_price").val());
+            var ethValue = web3.toBigNumber($(reqfield_1).val());
+            var tycheValue = ethValue.dividedBy(priceValue).round(4);
+            $(reqfield_2).val(tycheValue.toString(10));
+         }
+
+        // calculate the ther equivalent when buying or selling
+        function getEtherAmount(reqfield_1,reqfield_2) {
+            var priceValue = web3.toBigNumber($("#tyche_price").val());
+            var tycheValue = web3.toBigNumber($(reqfield_1).val());
+            var ethValue = priceValue.times(tycheValue).round(4);
+        $(reqfield_2).val(ethValue.toString(10));
+        }
+     
+        
+        /* get the balance of the user */
+        function getBalance(fieldreq) {
+            var dec_mult = web3.toBigNumber(Math.pow(10,18));
+            var balance
+            tycheContract.balanceOf(web3.eth.defaultAccount,function(err,result){
+                if(!err){
+                    balance = result.div(dec_mult);
+                    $(fieldreq).val(balance.toString(10));  
+                }else{
+                    window.alert("Was not possible to load your balance")
+                }    
+            });   
+        }
+
+        function tycheLotto_ticketPrice(){
+            var dec_mult = web3.toBigNumber(Math.pow(10,18));
+            tycheLottoContract.ticketPrice(function(err,result){
+                $("#lotto_ticketPrice").val(result.div(dec_mult).toString(10))
+            })
+        }
+        
+        function lotto_buyTickets(){
+            var ticketPrice = web3.toBigNumber($("#lotto_ticketPrice").val());
+            var dec_mult = web3.toBigNumber(Math.pow(10,18));
+            var ticketAmount = web3.toBigNumber($("#lotto_buyAmount").val());
+            var balance = web3.toBigNumber($("#tyche_balance").val());
+            if(ticketAmount.times(ticketPrice).lte(balance)){
+                tycheContract.interfaceWithApp(tycheLottoContract.address, ticketAmount.times(dec_mult), 0, function(err,result){})
+            }
+        }
+
+        function getTycheLottoWinners(){
+            var dec_mult = web3.toBigNumber(Math.pow(10,18));
+            var values;
+            tycheLottoContract.lottoId(function(err,id){
+                // udate last winner
+                tycheLottoContract.getLottoInfo(id-1, function(err,result){
+                    $("#lotto_winner_name").html(result[0]);
+                    $("#lotto_winner_amount").html(result[1].div(dec_mult).round(1).toString(10) + " TYC");
+                });
+
+                tycheLottoContract.getLottoInfo(id-2, function(err,result){
+                    $("#lotto_winner01_name").html(result[0]);
+                    $("#lotto_winner01_amount").html(result[1].div(dec_mult).round(1).toString(10) + " TYC");
+                });
+
+                tycheLottoContract.getLottoInfo(id-3, function(err,result){
+                    $("#lotto_winner02_name").html(result[0]);
+                    $("#lotto_winner02_amount").html(result[1].div(dec_mult).round(1).toString(10) + " TYC");
+                });
+
+                tycheLottoContract.getLottoInfo(id-4, function(err,result){
+                    $("#lotto_winner03_name").html(result[0]);
+                    $("#lotto_winner03_amount").html(result[1].div(dec_mult).round(1).toString(10) + " TYC");
+                });
+
+                tycheLottoContract.getLottoInfo(id-5, function(err,result){
+                    $("#lotto_winner04_name").html(result[0]);
+                    $("#lotto_winner04_amount").html(result[1].div(dec_mult).round(1).toString(10) + " TYC");
+                });
+
+                tycheLottoContract.getLottoInfo(id-6, function(err,result){
+                    $("#lotto_winner05_name").html(result[0]);
+                    $("#lotto_winner05_amount").html(result[1].div(dec_mult).round(1).toString(10) + " TYC");
+                });
+ 
+            });
+        }
+
+
+        function getPlayerTicketsAmount(param){
+            // 0 is lottp. 1 is Reward
+            tycheLottoContract.getTicketsAmount(web3.eth.defaultAccount, function(err,result){
+                if(param==0){
+                $("#lotto_AvailableTickets").val(result[param].toString(10));
+                };
+                if(param==1){
+                $("#reward_AvailableTickets").val(result[param].toString(10));
+                };
+            })
+        }
+        
+        function updateLottoStatus(){
+            // open or closed lotto
+            tycheLottoContract.isSet(function(err,result){
+                if(!result) {
+                    $("#lotto_status01").html('Tyche lotto is Open');
+                    } else { 
+                    $("#lotto_status01").html('Tyche lotto is Closed');
+                }
+            })
+            
+            web3.eth.getBlock('latest',function(err,result){
+                $("#lotto_status04").html('Current Block is ' + result.number);
+            })
+
+            tycheLottoContract.LottoBalance(function(err,result){
+                var dec_mult = web3.toBigNumber(Math.pow(10,18));
+                $("#lotto_status05").html(result.div(dec_mult).round(1).toString(10));
+            })
+
+
+        }
+
+
+        function getTycheRewardWinners(){
+            var dec_mult = web3.toBigNumber(Math.pow(10,18));
+            var values;
+            tycheLottoContract.RewardId(function(err,id){
+                // udate last winner
+                tycheLottoContract.getRewardInfo(id-1, function(err,result){
+                    $("#rewardwinner_name").html(result[0]);
+                    $("#rewardwinner_amount").html(result[1].div(dec_mult).round(1).toString(10) + " TYC");
+                });
+
+                tycheLottoContract.getRewardInfo(id-2, function(err,result){
+                    $("#rewardwinner01_name").html(result[0]);
+                    $("#rewardwinner01_amount").html(result[1].div(dec_mult).round(1).toString(10) + " TYC");
+                });
+
+                tycheLottoContract.getRewardInfo(id-3, function(err,result){
+                    $("#rewardwinner02_name").html(result[0]);
+                    $("#rewardwinner02_amount").html(result[1].div(dec_mult).round(1).toString(10) + " TYC");
+                });
+
+                tycheLottoContract.getRewardInfo(id-4, function(err,result){
+                    $("#rewardwinner03_name").html(result[0]);
+                    $("#rewardwinner03_amount").html(result[1].div(dec_mult).round(1).toString(10) + " TYC");
+                });
+
+                tycheLottoContract.getRewardInfo(id-5, function(err,result){
+                    $("#rewardwinner04_name").html(result[0]);
+                    $("#rewardwinner04_amount").html(result[1].div(dec_mult).round(1).toString(10) + " TYC");
+                });
+
+                tycheLottoContract.getRewardInfo(id-6, function(err,result){
+                    $("#rewardwinner05_name").html(result[0]);
+                    $("#rewardwinner05_amount").html(result[1].div(dec_mult).round(1).toString(10) + " TYC");
+                });
+ 
+            });
+        }
+
+
+        function updateRewardStatus(){
+            // open or closed lotto
+            var dec_mult = web3.toBigNumber(Math.pow(10,18));
+            tycheLottoContract.isSet(function(err,result){
+                if(!result) {
+                    $("#reward_status01").html('Tyche lotto is Open');
+                    } else { 
+                    $("#reward_status01").html('Tyche lotto is Closed');
+                }
+            })
+            
+            web3.eth.getBlock('latest',function(err,result){
+                $("#reward_status04").html('Current Block is ' + result.number);
+            })
+
+            tycheLottoContract.RewardBalance(function(err,result){
+                $("#reward_status05").html(result.div(dec_mult).round(1).toString(10));
+            })
+
+
+        }
+      </script>
+</body>
+</html>
